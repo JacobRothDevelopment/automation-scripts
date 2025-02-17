@@ -2,7 +2,7 @@
 
 # example: sqlite-backup -n test -t 7 -p backups
 
-version="B 0.21.0"
+version="B 0.2.0"
 debug_mode=0
 
 # more here on colors:
