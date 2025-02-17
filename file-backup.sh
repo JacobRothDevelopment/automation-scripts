@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# example: sqlite-backup -n test -t 7 -p backups
+# example: sqlite-backup -f test.txt -t 7 -p backups
 
-version="B 0.2.0"
+version="B 0.2.1"
 debug_mode=0
+dry_run_mode=0
 
 # more here on colors:
 # https://stackoverflow.com/q/5947742
@@ -15,7 +16,7 @@ no_color='\e[0m'
 
 version() { echo "script version $version"; }
 newline() { echo ""; }
-usage() { echo "USAGE: bash sqlite-backup.sh -f <file path> -t <days> -p <backup path>"; }
+usage() { echo "USAGE: bash file-backup.sh -f <file path> -t <days> -p <backup path>"; }
 separate() { echo "----------------------------------------------------------------"; }
 debug() {
     if [ $debug_mode -gt 0 ]; then
@@ -27,9 +28,10 @@ warn() { echo -e "${yellow}$1${no_color}"; }
 options() {
     cat <<-OPTIONS_LIST
   -d    debug mode
-  -h    help
   -f    file path
+  -h    help
   -p    path to backup directory
+  -r    dry run mode (won't create or modify any files)
   -t    number of days to keep backups
   -v    version
 OPTIONS_LIST
@@ -49,7 +51,7 @@ operation=0
 
 # check flags before doing any logic
 # cspell:disable-next-line
-while getopts ":f:t:p:dhvc" option; do
+while getopts ":f:t:p:drhvc" option; do
     case "${option}" in
     d) debug_mode=1 ;;
     f)
@@ -64,6 +66,7 @@ while getopts ":f:t:p:dhvc" option; do
         path=${OPTARG}
         set_operation 'backup'
         ;;
+    r) dry_run_mode=1 ;;
     c) set_operation 'cat' ;;
     v) set_operation 'version' ;;
     h) set_operation 'help' ;;
@@ -105,15 +108,32 @@ case "${operation}" in
 
     mkdir -p $path
 
-    filename=$(basename "$file" .sqlite)
-    debug "filename: $filename"
+    baseFile=$(basename $file)
+    extension="${baseFile#*.}"
+    filename="${file%%.*}"
 
-    # delete old backups
-    # find $path -mindepth 1 -mtime +$days -delete
-    find $path/$filename-*.sqlite.gz -mtime +$days -type f -delete
+    if [ $dry_run_mode -eq 0 ]; then
+        # delete old backups
+        # find $path -mindepth 1 -mtime $days -delete
+        find $path/$filename-*.$extension.gz -mtime $days -type f -delete
+        debug "old files removed"
 
-    # make new backup
-    gzip -c $file >$path/$filename-$(date +%Y%m%d-%H%M%S).sqlite.gz
+        # make new backup
+        gzip -c $file >$path/$filename-$(date +%Y%m%d-%H%M%S).$extension.gz
+        debug "backup created"
+    else
+        debug "filename: $filename"
+        debug "extension: $extension"
+        warn "No changes are made in dry run mode"
+        echo "command to delete old backups:"
+        echo "find $path/$filename-*.$extension.gz -mtime $days -type f -delete"
+
+        echo -e "\nfiles to delete:"
+        find $path/$filename-*.$extension.gz -mtime $days -type f
+
+        echo -e "\nnew backup file:"
+        echo "$path/$filename-$(date +%Y%m%d-%H%M%S).$extension.gz"
+    fi
     ;;
 *)
     warn "no operation selected"
