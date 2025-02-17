@@ -2,7 +2,7 @@
 
 # example: sqlite-backup -n test -t 7 -p backups
 
-version="B 0.1.0"
+version="B 0.21.0"
 debug_mode=0
 
 # more here on colors:
@@ -15,7 +15,7 @@ no_color='\e[0m'
 
 version() { echo "script version $version"; }
 newline() { echo ""; }
-usage() { echo "USAGE: bash sqlite-backup.sh -n <database path> -t <days> -p <backup path>"; }
+usage() { echo "USAGE: bash sqlite-backup.sh -f <file path> -t <days> -p <backup path>"; }
 separate() { echo "----------------------------------------------------------------"; }
 debug() {
     if [ $debug_mode -gt 0 ]; then
@@ -28,7 +28,7 @@ options() {
     cat <<-OPTIONS_LIST
   -d    debug mode
   -h    help
-  -n    database path
+  -f    file path
   -p    path to backup directory
   -t    number of days to keep backups
   -v    version
@@ -48,11 +48,12 @@ set_operation() {
 operation=0
 
 # check flags before doing any logic
-while getopts ":n:t:p:dhvc" option; do
+# cspell:disable-next-line
+while getopts ":f:t:p:dhvc" option; do
     case "${option}" in
     d) debug_mode=1 ;;
-    n)
-        database=${OPTARG}
+    f)
+        file=${OPTARG}
         set_operation 'backup'
         ;;
     t)
@@ -94,8 +95,8 @@ case "${operation}" in
     echo -e " /\\_/\\ \n( o.o )\n > ^ <\n"
     ;;
 'backup')
-    if [[ -z $database || -z $days || -z $path ]]; then
-        debug "database: $database"
+    if [[ -z $file || -z $days || -z $path ]]; then
+        debug "file: $file"
         debug "days: $days"
         debug "path: $path"
         usage
@@ -104,7 +105,7 @@ case "${operation}" in
 
     mkdir -p $path
 
-    filename=$(basename "$database" .sqlite)
+    filename=$(basename "$file" .sqlite)
     debug "filename: $filename"
 
     # delete old backups
@@ -112,7 +113,7 @@ case "${operation}" in
     find $path/$filename-*.sqlite.gz -mtime +$days -type f -delete
 
     # make new backup
-    gzip -c $database >$path/$filename-$(date +%Y%m%d-%H%M%S).sqlite.gz
+    gzip -c $file >$path/$filename-$(date +%Y%m%d-%H%M%S).sqlite.gz
     ;;
 *)
     warn "no operation selected"
