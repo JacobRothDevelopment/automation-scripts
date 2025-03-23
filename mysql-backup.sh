@@ -2,7 +2,7 @@
 
 # example: mysql-backup -n test -t 7 -p backups
 
-version="1.0.1"
+version="1.0.2"
 debug_mode=0
 
 # more here on colors:
@@ -105,8 +105,8 @@ case "${operation}" in
     mkdir -p $path
 
     # delete old backups
-    # find $path -mindepth 1 -mtime +$days -delete
-    find $path/$database-*.sql.gz -mtime +$days -type f -delete
+    # find $path -mindepth 1 -mtime $days -delete
+    find $path/$database-*.sql.gz -mtime $days -type f -delete
 
     # make new backup
     mysqldump $database | gzip -c >$path/$database-$(date +%Y%m%d-%H%M%S).sql.gz
