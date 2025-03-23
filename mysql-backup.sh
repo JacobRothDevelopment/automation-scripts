@@ -2,7 +2,7 @@
 
 # example: mysql-backup -n test -t 7 -p backups
 
-version="1.0.2"
+version="1.0.3"
 debug_mode=0
 
 # more here on colors:
@@ -67,11 +67,11 @@ while getopts ":n:t:p:dhvc" option; do
     v) set_operation 'version' ;;
     h) set_operation 'help' ;;
     :)
-        echo "Option -${OPTARG} requires an argument."
+        error "Option -${OPTARG} requires an argument."
         exit 1
         ;;
     \?)
-        echo "Invalid option: -${OPTARG}."
+        error "Invalid option: -${OPTARG}."
         exit 1
         ;;
     esac
