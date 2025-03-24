@@ -2,7 +2,7 @@
 
 # example: sqlite-backup -f test.txt -t 7 -p backups
 
-version="B 0.2.1"
+version="B 0.2.2"
 debug_mode=0
 dry_run_mode=0
 
@@ -111,6 +111,7 @@ case "${operation}" in
     baseFile=$(basename $file)
     extension="${baseFile#*.}"
     filename="${file%%.*}"
+    date="$(date +%Y%m%d-%H%M%S)"
 
     if [ $dry_run_mode -eq 0 ]; then
         # delete old backups
@@ -119,7 +120,7 @@ case "${operation}" in
         debug "old files removed"
 
         # make new backup
-        gzip -c $file >$path/$filename-$(date +%Y%m%d-%H%M%S).$extension.gz
+        gzip -c $file >$path/$filename-$date.$extension.gz
         debug "backup created"
     else
         debug "filename: $filename"
@@ -132,7 +133,7 @@ case "${operation}" in
         find $path/$filename-*.$extension.gz -mtime $days -type f
 
         echo -e "\nnew backup file:"
-        echo "$path/$filename-$(date +%Y%m%d-%H%M%S).$extension.gz"
+        echo "$path/$filename-$date.$extension.gz"
     fi
     ;;
 *)
