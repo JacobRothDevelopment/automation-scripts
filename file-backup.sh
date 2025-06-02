@@ -53,92 +53,92 @@ operation=0
 # cspell:disable-next-line
 while getopts ":f:t:p:drhvc" option; do
     case "${option}" in
-    d) debug_mode=1 ;;
-    f)
-        file=${OPTARG}
-        set_operation 'backup'
+        d) debug_mode=1 ;;
+        f)
+            file=${OPTARG}
+            set_operation 'backup'
         ;;
-    t)
-        days=${OPTARG}
-        set_operation 'backup'
+        t)
+            days=${OPTARG}
+            set_operation 'backup'
         ;;
-    p)
-        path=${OPTARG}
-        set_operation 'backup'
+        p)
+            path=${OPTARG}
+            set_operation 'backup'
         ;;
-    r) dry_run_mode=1 ;;
-    c) set_operation 'cat' ;;
-    v) set_operation 'version' ;;
-    h) set_operation 'help' ;;
-    :)
-        echo "Option -${OPTARG} requires an argument."
-        exit 1
+        r) dry_run_mode=1 ;;
+        c) set_operation 'cat' ;;
+        v) set_operation 'version' ;;
+        h) set_operation 'help' ;;
+        :)
+            echo "Option -${OPTARG} requires an argument."
+            exit 1
         ;;
-    \?)
-        echo "Invalid option: -${OPTARG}."
-        exit 1
+        \?)
+            echo "Invalid option: -${OPTARG}."
+            exit 1
         ;;
     esac
 done
 
 # run the chosen operation
 case "${operation}" in
-'version')
-    version
+    'version')
+        version
     ;;
-'help')
-    version
-    newline
-    usage
-    separate
-    options
-    ;;
-'cat')
-    debug "you found the cat"
-    echo -e " /\\_/\\ \n( o.o )\n > ^ <\n"
-    ;;
-'backup')
-    if [[ -z $file || -z $days || -z $path ]]; then
-        debug "file: $file"
-        debug "days: $days"
-        debug "path: $path"
+    'help')
+        version
+        newline
         usage
-        exit 1
-    fi
-
-    mkdir -p $path
-
-    baseFile=$(basename $file)
-    extension="${baseFile#*.}"
-    filename="${file%%.*}"
-    date="$(date +%Y%m%d-%H%M%S)"
-
-    if [ $dry_run_mode -eq 0 ]; then
-        # delete old backups
-        # find $path -mindepth 1 -mtime $days -delete
-        find $path/$filename-*.$extension.gz -mtime $days -type f -delete
-        debug "old files removed"
-
-        # make new backup
-        gzip -c $file >$path/$filename-$date.$extension.gz
-        debug "backup created"
-    else
-        debug "filename: $filename"
-        debug "extension: $extension"
-        warn "No changes are made in dry run mode"
-        echo "command to delete old backups:"
-        echo "find $path/$filename-*.$extension.gz -mtime $days -type f -delete"
-
-        echo -e "\nfiles to delete:"
-        find $path/$filename-*.$extension.gz -mtime $days -type f
-
-        echo -e "\nnew backup file:"
-        echo "$path/$filename-$date.$extension.gz"
-    fi
+        separate
+        options
     ;;
-*)
-    warn "no operation selected"
-    debug "); you called me but didn't say anything"
-    debug "now i feel useless"
+    'cat')
+        debug "you found the cat"
+        echo -e " /\\_/\\ \n( o.o )\n > ^ <\n"
+    ;;
+    'backup')
+        if [[ -z $file || -z $days || -z $path ]]; then
+            debug "file: $file"
+            debug "days: $days"
+            debug "path: $path"
+            usage
+            exit 1
+        fi
+        
+        mkdir -p $path
+        
+        baseFile=$(basename $file)
+        extension="${baseFile#*.}"
+        filename="${file%%.*}"
+        date="$(date +%Y%m%d-%H%M%S)"
+        
+        if [ $dry_run_mode -eq 0 ]; then
+            # delete old backups
+            # find $path -mindepth 1 -mtime $days -delete
+            find $path/$filename-*.$extension.gz -mtime $days -type f -delete
+            debug "old files removed"
+            
+            # make new backup
+            gzip -c $file >$path/$filename-$date.$extension.gz
+            debug "backup created"
+        else
+            debug "filename: $filename"
+            debug "extension: $extension"
+            warn "No changes are made in dry run mode"
+            echo "command to delete old backups:"
+            echo "find $path/$filename-*.$extension.gz -mtime $days -type f -delete"
+            
+            echo -e "\nfiles to delete:"
+            find $path/$filename-*.$extension.gz -mtime $days -type f
+            
+            echo -e "\nnew backup file:"
+            echo "$path/$filename-$date.$extension.gz"
+        fi
+    ;;
+    *)
+        warn "no operation selected"
+        debug "); you called me but didn't say anything"
+        debug "now i feel useless"
     ;;
 esac
