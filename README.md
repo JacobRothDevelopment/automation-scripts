@@ -1,6 +1,6 @@
 # automation-scripts
 
-| Bash Script         | Description                                                                                         | Latest Version |
+| Script              | Description                                                                                         | Latest Version |
 | ------------------- | --------------------------------------------------------------------------------------------------- | -------------- |
 | mysql-backup.sh     | Create mysql backups using mysqldump & gzip. Automatically remove old backups                       | 1.0.3          |
 | file-backup.sh      | Create file copies using gzip. Automatically remove old backups. Useful for document/sqlite archive | B 0.2.2        |
