@@ -50,70 +50,70 @@ operation=0
 # check flags before doing any logic
 while getopts ":n:t:p:dhvc" option; do
     case "${option}" in
-    d) debug_mode=1 ;;
-    n)
-        database=${OPTARG}
-        set_operation 'backup'
+        d) debug_mode=1 ;;
+        n)
+            database=${OPTARG}
+            set_operation 'backup'
         ;;
-    t)
-        days=${OPTARG}
-        set_operation 'backup'
+        t)
+            days=${OPTARG}
+            set_operation 'backup'
         ;;
-    p)
-        path=${OPTARG}
-        set_operation 'backup'
+        p)
+            path=${OPTARG}
+            set_operation 'backup'
         ;;
-    c) set_operation 'cat' ;;
-    v) set_operation 'version' ;;
-    h) set_operation 'help' ;;
-    :)
-        error "Option -${OPTARG} requires an argument."
-        exit 1
+        c) set_operation 'cat' ;;
+        v) set_operation 'version' ;;
+        h) set_operation 'help' ;;
+        :)
+            error "Option -${OPTARG} requires an argument."
+            exit 1
         ;;
-    \?)
-        error "Invalid option: -${OPTARG}."
-        exit 1
+        \?)
+            error "Invalid option: -${OPTARG}."
+            exit 1
         ;;
     esac
 done
 
 # run the chosen operation
 case "${operation}" in
-'version')
-    version
+    'version')
+        version
     ;;
-'help')
-    version
-    newline
-    usage
-    separate
-    options
-    ;;
-'cat')
-    debug "you found the cat"
-    echo -e " /\\_/\\ \n( o.o )\n > ^ <\n"
-    ;;
-'backup')
-    if [[ -z $database || -z $days || -z $path ]]; then
-        debug "database: $database"
-        debug "days: $days"
-        debug "path: $path"
+    'help')
+        version
+        newline
         usage
-        exit 1
-    fi
-
-    mkdir -p $path
-
-    # delete old backups
-    # find $path -mindepth 1 -mtime $days -delete
-    find $path/$database-*.sql.gz -mtime $days -type f -delete
-
-    # make new backup
-    mysqldump $database | gzip -c >$path/$database-$(date +%Y%m%d-%H%M%S).sql.gz
+        separate
+        options
     ;;
-*)
-    warn "no operation selected"
-    debug "); you called me but didn't say anything"
-    debug "now i feel useless"
+    'cat')
+        debug "you found the cat"
+        echo -e " /\\_/\\ \n( o.o )\n > ^ <\n"
+    ;;
+    'backup')
+        if [[ -z $database || -z $days || -z $path ]]; then
+            debug "database: $database"
+            debug "days: $days"
+            debug "path: $path"
+            usage
+            exit 1
+        fi
+        
+        mkdir -p $path
+        
+        # delete old backups
+        # find $path -mindepth 1 -mtime $days -delete
+        find $path/$database-*.sql.gz -mtime $days -type f -delete
+        
+        # make new backup
+        mysqldump $database | gzip -c >$path/$database-$(date +%Y%m%d-%H%M%S).sql.gz
+    ;;
+    *)
+        warn "no operation selected"
+        debug "); you called me but didn't say anything"
+        debug "now i feel useless"
     ;;
 esac
