@@ -17,3 +17,5 @@
 | ps-upgrade.ps1 | Upgrade Powershell                                                             | 1.0.0          |
 | connect.ps1    | Shortcut for running remote connection commands like ssh                       | 1.0.0          |
 | vscode_ext.ps1 | Automate VSCode extension installation to sync extensions across installations | B 0.1.0        |
+| multi-php.ps1  | easily switch between php versions in cli                                      | 1.0.0          |
+| colors.sh      | Display some available styling for terminal outputs                            |                |
