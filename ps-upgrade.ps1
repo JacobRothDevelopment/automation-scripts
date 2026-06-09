@@ -3,14 +3,14 @@
 [CmdletBinding()]
 
 param (
-    [ValidateSet("install", "uninstall", "list", IgnoreCase = $false)]
+    [ValidateSet("install", "i", "uninstall", "list", "l", IgnoreCase = $false)]
     [string]$action,
     [switch]$version
 )
 
 #TODO create usage function and help option
 
-$versionNumber = "1.0.0";
+$versionNumber = "1.1.0";
 
 if ($version) {
     Write-Output $versionNumber
@@ -18,13 +18,13 @@ if ($version) {
 }
 
 switch ($action) {
-    "install" {
+    { "i", "install" -eq $_ } {
         winget install --id Microsoft.Powershell --source winget
     }
     "uninstall" {
         winget uninstall Microsoft.PowerShell
     }
-    "list" {
+    { "l", "list" -eq $_ } {
         winget list powershell
     }
     Default { Write-Warning "Please provide an action" }
