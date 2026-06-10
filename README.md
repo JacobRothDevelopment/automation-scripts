@@ -25,7 +25,13 @@
 
 ### Power User
 
-- add ability to run PS1 scripts from anywhere
+- Windows: Add ability to run `.ps1` scripts from anywhere
   - Edit System Environment Variables
   - Add `.PS1` to `PATHEXT`
   - Add this directory to `PATH`
+- Linux: Add ability to run `.sh` scripts from anywhere
+  ```bash
+  chmod +x ./*.sh
+  echo -e "\nexport PATH=\"\$PATH:$(pwd)\"" >> ~/.bashrc
+  source ~/.bashrc
+  ```
