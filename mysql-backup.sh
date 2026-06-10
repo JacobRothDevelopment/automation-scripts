@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # example: mysql-backup -n test -t 7 -p backups
+set -euo pipefail
 
-version="1.0.3"
+version="1.0.4"
 debug_mode=0
 
 # more here on colors:

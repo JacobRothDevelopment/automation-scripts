@@ -5,9 +5,9 @@
 | Script              | Description                                                                                         | Latest Version |
 | ------------------- | --------------------------------------------------------------------------------------------------- | -------------- |
 | colors.sh           | Display some available styling for terminal outputs                                                 |                |
-| file-backup.sh      | Create file copies using gzip. Automatically remove old backups. Useful for document/sqlite archive | B 0.2.2        |
-| mysql-backup.sh     | Create mysql backups using mysqldump & gzip. Automatically remove old backups                       | 1.0.3          |
-| php-sqlite-model.sh | Create db class model based on given sqlite database                                                | B 0.0.1        |
+| file-backup.sh      | Create file copies using gzip. Automatically remove old backups. Useful for document/sqlite archive | B 0.2.3        |
+| mysql-backup.sh     | Create mysql backups using mysqldump & gzip. Automatically remove old backups                       | 1.0.4          |
+| php-sqlite-model.sh | Create db class model based on given sqlite database                                                | B 0.0.2        |
 
 ### PowerShell
 

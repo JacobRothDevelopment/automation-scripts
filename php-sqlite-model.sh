@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # example: ./php-sqlite-model.sh -n Models\Db -D test/classes/db/ -p test/database.sqlite
+set -euo pipefail
 
 # region consts
-version="B 0.0.1"
+version="B 0.0.2"
 
 debug_mode=0
 dry_run_mode=0

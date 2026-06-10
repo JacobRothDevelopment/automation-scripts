@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # example: sqlite-backup -f test.txt -t 7 -p backups
+set -euo pipefail
 
-version="B 0.2.2"
+version="B 0.2.3"
 debug_mode=0
 dry_run_mode=0
 
