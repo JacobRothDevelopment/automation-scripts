@@ -20,7 +20,7 @@
 | ps-upgrade.ps1 | Manage Powershell version                                                      | 1.1.0          |
 | spice.ps1      | Shortcut to spicetify scripts                                                  | 1.0.0          |
 | winfind.ps1    | Recursively search for a filename in a directory                               |                |
-| wingrep.ps1    | Recursively search for text in any file in a directory                         |                |
+| wingrep.ps1    | Recursively search for text in any file in a directory                         | 2.0.0          |
 | vscode_ext.ps1 | Automate VSCode extension installation to sync extensions across installations | B 0.1.0        |
 
 ### Power User
