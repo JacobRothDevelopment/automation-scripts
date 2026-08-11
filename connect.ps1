@@ -11,8 +11,6 @@ param (
     [switch]$version
 )
 
-#TODO create usage function and help option
-
 #region Globals
 
 $versionNumber = "1.0.1";
