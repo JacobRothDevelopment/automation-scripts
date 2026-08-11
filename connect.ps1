@@ -4,7 +4,9 @@
 
 param (
     [string]$server_in,
+    [switch]$help,
     [switch]$open,
+    [switch]$edit,
     [switch]$show,
     [switch]$version
 )
@@ -13,11 +15,10 @@ param (
 
 #region Globals
 
-$versionNumber = "1.0.0";
+$versionNumber = "1.0.1";
 
 $hashFileName = "hash.ps1";
 $newHashFileContent = "`$hash = [ordered]@{`r`n    `"default`" = `"ssh me@localhost`";`r`n}";
-$programForOpen = "notepad++"
 $scriptName = $MyInvocation.MyCommand.Name
 
 #endregion
@@ -69,13 +70,26 @@ $scriptDir = Get-ScriptDirectory
 $hashFile = "$scriptDir\$hashFileName"
 Write-Debug "loading has file from: `"$($hashFile)`""
 
+if ($help) {
+    Write-Output "Usage: connect.ps1 [options...] <server>"
+    Write-Output "-d, -debug       debug mode"
+    Write-Output "-h, -help        help"
+    Write-Output "-o, -open        open hash file in text editor"
+    Write-Output "-e, -edit        open hash file in text editor"
+    Write-Output "-s, -show        show servers available to connect"
+    Write-Output "-v, -version     show script version"
+    Write-Debug "script location: $scriptDir"
+    Write-Debug "hash file location: $hashFile"
+    Exit
+}
+
 if ($version) {
     Write-Output $versionNumber
     Exit
 }
 
-if ($open) {
-    Start-Process $programForOpen $hashFile
+if ($open -or $edit) {
+    Invoke-Item $hashFile
     Exit
 }
 
