@@ -6,7 +6,7 @@ param (
 
 #region globals
 
-$versionNumber = "2.0.0"
+$versionNumber = "2.0.1"
 
 #endregion
 
@@ -21,4 +21,4 @@ if ($version) {
 }
 
 # Get-ChildItem . -Recurse | Select-String $needle | Select-Object -Unique Path
-Get-ChildItem . -Recurse | Select-String $needle | Select-Object LineNumber, Line, @{Name = "RelativePath"; Expression = { (Resolve-Path $_.Path -Relative) } }
+Get-ChildItem . -Recurse | Select-String -Pattern $needle | Select-Object LineNumber, Line, @{Name = "RelativePath"; Expression = { (Resolve-Path $_.Path -Relative) } }
