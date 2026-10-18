@@ -14,7 +14,7 @@
 | Script         | Description                                                                    | Latest Version |
 | -------------- | ------------------------------------------------------------------------------ | -------------- |
 | colors.ps1     | Display some available styling for terminal outputs                            |                |
-| connect.ps1    | Shortcut for running remote connection commands like ssh                       | 1.0.1          |
+| connect.ps1    | Shortcut for running remote connection commands like ssh                       | 1.1.0          |
 | formatJson.ps1 | Convert JSON file between prettified and compressed                            |                |
 | multi-php.ps1  | easily switch between php versions in cli                                      | 1.0.0          |
 | ps-upgrade.ps1 | Manage Powershell version                                                      | 1.1.0          |

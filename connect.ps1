@@ -4,6 +4,7 @@
 
 param (
     [string]$server_in,
+    [string]$file,
     [switch]$help,
     [switch]$open,
     [switch]$edit,
@@ -13,7 +14,7 @@ param (
 
 #region Globals
 
-$versionNumber = "1.0.1";
+$versionNumber = "1.1.0";
 
 $hashFileName = "hash.ps1";
 $newHashFileContent = "`$hash = [ordered]@{`r`n    `"default`" = `"ssh me@localhost`";`r`n}";
@@ -64,13 +65,21 @@ function Get-ScriptDirectory() {
 
 #endregion
 
-$scriptDir = Get-ScriptDirectory
-$hashFile = "$scriptDir\$hashFileName"
+# use custom hash if provided
+$hashFile = ""
+if ($file) {
+    $hashFile = $file
+} else {
+    $scriptDir = Get-ScriptDirectory
+    $hashFile = "$scriptDir\$hashFileName"
+}
+
 Write-Debug "loading has file from: `"$($hashFile)`""
 
 if ($help) {
     Write-Output "Usage: connect.ps1 [options...] <server>"
     Write-Output "-d, -debug       debug mode"
+    Write-Output "-f, -file        custom hash file"
     Write-Output "-h, -help        help"
     Write-Output "-o, -open        open hash file in text editor"
     Write-Output "-e, -edit        open hash file in text editor"
@@ -123,5 +132,6 @@ if ($null -eq $command) {
 }
 
 # if index and command are fine, then good to go
+
 Write-Output "Connecting ... "
 Invoke-Expression $command
